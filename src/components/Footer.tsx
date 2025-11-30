@@ -58,7 +58,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-slate-300 text-sm">{t.footer.phone}</p>
-                  <p className="text-white font-semibold">+20 106 733 3964</p>
+                  <p className="text-white font-semibold">+971 556 375 521</p>
                 </div>
               </div>
               

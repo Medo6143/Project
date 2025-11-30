@@ -4,15 +4,15 @@ import App from './App.tsx';
 import './index.css';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
-import { RouterProvider } from './context/RouterContext';
+import { BrowserRouter } from 'react-router-dom';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <LanguageProvider>
       <CartProvider>
-        <RouterProvider>
+        <BrowserRouter>
           <App />
-        </RouterProvider>
+        </BrowserRouter>
       </CartProvider>
     </LanguageProvider>
   </StrictMode>

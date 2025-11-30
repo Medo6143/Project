@@ -59,8 +59,19 @@ export default function Products() {
     const handleEscape = (e) => {
       if (e.key === 'Escape') setSelectedProduct(null);
     };
+    const openFromHero = (e: CustomEvent<{ index?: number }>) => {
+      const idx = typeof e.detail?.index === 'number' ? e.detail.index! : 0;
+      const target = products[idx] ?? products[0];
+      setSelectedProduct(target as any);
+    };
+
     document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    window.addEventListener('openProductsModal' as any, openFromHero as any);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('openProductsModal' as any, openFromHero as any);
+    };
   }, []);
 
   const handleOrderSubmit = () => {

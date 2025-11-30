@@ -2,18 +2,18 @@ import { useState } from 'react';
 import { Menu, X, ShoppingCart, Globe, MapPin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
-import { useRouter } from '../context/RouterContext';
+import { useNavigate, Link } from 'react-router-dom';
 import { translations } from '../lib/translations';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
   const { itemCount } = useCart();
-  const { navigate } = useRouter();
+  const navigate = useNavigate();
   const t = translations[language];
 
-  const handleNavigation = (page: 'home' | 'products' | 'cart' | 'admin') => {
-    navigate(page);
+  const handleNavigation = (path: string) => {
+    navigate(path);
     setIsMenuOpen(false);
   };
 
@@ -23,26 +23,20 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo and Navigation */}
           <div className="flex items-center gap-8 flex-1">
-            <button
-              onClick={() => handleNavigation('home')}
-              className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent whitespace-nowrap hover:opacity-80 transition-all duration-300 hover:scale-105"
-            >
+            <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent whitespace-nowrap hover:opacity-80 transition-all duration-300 hover:scale-105">
               MAJD PARTS
-            </button>
+            </Link>
 
             <nav className="hidden lg:flex items-center gap-6">
-              <button
-                onClick={() => handleNavigation('home')}
-                className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50"
-              >
+              <Link to="/" className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50">
                 {t.header.home}
-              </button>
-              <button
-                onClick={() => handleNavigation('products')}
-                className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50"
-              >
+              </Link>
+              <Link to="/products" className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50">
                 {t.header.products}
-              </button>
+              </Link>
+              <Link to="/admin" className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50">
+                {t.header.admin}
+              </Link>
               <a 
                 href="#about" 
                 className="text-slate-300 hover:text-blue-400 transition-all duration-300 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-800/50"
@@ -113,7 +107,7 @@ export default function Header() {
 
             {/* Cart Button */}
             <button
-              onClick={() => handleNavigation('cart')}
+              onClick={() => handleNavigation('/cart')}
               className="relative p-3 bg-slate-800/60 hover:bg-slate-700/60 rounded-xl transition-all duration-300 group border border-slate-600/50 hover:border-blue-500/30 hover:scale-105"
             >
               <ShoppingCart className="w-5 h-5 text-blue-400 group-hover:text-cyan-400 transition-colors duration-300" />
@@ -170,25 +164,31 @@ export default function Header() {
             {/* Mobile Navigation */}
             <nav className="flex flex-col gap-2">
               <button
-                onClick={() => handleNavigation('home')}
+                onClick={() => handleNavigation('/')}
                 className="text-slate-300 hover:text-blue-400 transition-all duration-300 py-3 px-4 text-right rounded-xl hover:bg-slate-700/50 text-sm font-medium"
               >
                 {t.header.home}
               </button>
               <button
-                onClick={() => handleNavigation('products')}
+                onClick={() => handleNavigation('/products')}
                 className="text-slate-300 hover:text-blue-400 transition-all duration-300 py-3 px-4 text-right rounded-xl hover:bg-slate-700/50 text-sm font-medium"
               >
                 {t.header.products}
               </button>
-              <a 
-                href="#about" 
+              <button
+                onClick={() => handleNavigation('/admin')}
+                className="text-slate-300 hover:text-blue-400 transition-all duration-300 py-3 px-4 text-right rounded-xl hover:bg-slate-700/50 text-sm font-medium"
+              >
+                {t.header.admin}
+              </button>
+              <a
+                href="#about"
                 className="text-slate-300 hover:text-blue-400 transition-all duration-300 py-3 px-4 text-right rounded-xl hover:bg-slate-700/50 text-sm font-medium"
               >
                 {t.header.about}
               </a>
-              <a 
-                href="#contact" 
+              <a
+                href="#contact"
                 className="text-slate-300 hover:text-blue-400 transition-all duration-300 py-3 px-4 text-right rounded-xl hover:bg-slate-700/50 text-sm font-medium"
               >
                 {t.header.contact}
@@ -198,7 +198,7 @@ export default function Header() {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes flagWave {
           0% { 
             transform: perspective(400px) rotateY(0deg) rotateX(0deg) scale(1);
@@ -221,10 +221,27 @@ export default function Header() {
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
           }
         }
-        .animate-flag-wave {
-          animation: flagWave 4s ease-in-out infinite;
+        25% { 
+          transform: perspective(400px) rotateY(2deg) rotateX(1deg) scale(1.02);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
         }
-      `}</style>
-    </header>
-  );
+        50% { 
+          transform: perspective(400px) rotateY(0deg) rotateX(0deg) scale(1);
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        }
+        75% { 
+          transform: perspective(400px) rotateY(-2deg) rotateX(-1deg) scale(1.02);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+        }
+        100% { 
+          transform: perspective(400px) rotateY(0deg) rotateX(0deg) scale(1);
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+        }
+      }
+      .animate-flag-wave {
+        animation: flagWave 4s ease-in-out infinite;
+      }
+    `}</style>
+  </header>
+);
 }

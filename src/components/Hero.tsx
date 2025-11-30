@@ -3,11 +3,13 @@ import { useLanguage } from "../context/LanguageContext";
 import { translations } from "../lib/translations";
 
 import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
   const { language } = useLanguage();
   const t = translations[language];
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const navigate = useNavigate();
 
   const [partName, setPartName] = useState("");
   const [condition, setCondition] = useState("new");
@@ -21,6 +23,7 @@ export default function Hero() {
   ];
 
   const sendWhatsAppOrder = () => {
+
     const phone = "+971556375521";
     const message = `
 طلب جديد:
@@ -31,6 +34,20 @@ export default function Hero() {
 `;
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
+  };
+
+  const openProductsFromHero = () => {
+    const trigger = () => {
+      const el = document.querySelector('#products') as HTMLElement | null;
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.dispatchEvent(new CustomEvent('openProductsModal', { detail: { index: 0 } }));
+    };
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      setTimeout(trigger, 200);
+    } else {
+      trigger();
+    }
   };
 
   return (
@@ -72,7 +89,7 @@ export default function Hero() {
         {/* أزرار الهيرو */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
-            onClick={() => setShowOrderModal(true)}
+            onClick={openProductsFromHero}
             className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-green-500/50 transition-all duration-300 hover:scale-105 flex items-center gap-2"
           >
             {t.hero.orderNow}
