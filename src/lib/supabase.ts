@@ -3,13 +3,20 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+export const SUPABASE_ENABLED = Boolean(supabaseUrl && supabaseAnonKey);
+
+export const supabase = SUPABASE_ENABLED
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : (null as any);
+
+if (!SUPABASE_ENABLED) {
+  console.warn('Supabase disabled: missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export async function getCategories() {
+  if (!SUPABASE_ENABLED) {
+    return [];
+  }
   const { data, error } = await supabase
     .from('categories')
     .select('*')
@@ -23,6 +30,9 @@ export async function getCategories() {
 }
 
 export async function getProductsByCategory(categoryId: string) {
+  if (!SUPABASE_ENABLED) {
+    return [];
+  }
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -37,6 +47,9 @@ export async function getProductsByCategory(categoryId: string) {
 }
 
 export async function getProducts(filters?: { origin?: string }) {
+  if (!SUPABASE_ENABLED) {
+    return [];
+  }
   let query = supabase.from('products').select('*');
 
   if (filters?.origin) {
@@ -60,6 +73,9 @@ export async function createOrder(orderData: {
   total_amount: number;
   notes?: string;
 }) {
+  if (!SUPABASE_ENABLED) {
+    return null;
+  }
   const { data, error } = await supabase
     .from('orders')
     .insert([orderData])
@@ -74,6 +90,9 @@ export async function createOrder(orderData: {
 }
 
 export async function insertProduct(productData: any) {
+  if (!SUPABASE_ENABLED) {
+    return null;
+  }
   const { data, error } = await supabase
     .from('products')
     .insert([productData])
@@ -88,6 +107,9 @@ export async function insertProduct(productData: any) {
 }
 
 export async function updateProduct(id: string, productData: any) {
+  if (!SUPABASE_ENABLED) {
+    return null;
+  }
   const { data, error } = await supabase
     .from('products')
     .update(productData)
@@ -103,6 +125,9 @@ export async function updateProduct(id: string, productData: any) {
 }
 
 export async function deleteProduct(id: string) {
+  if (!SUPABASE_ENABLED) {
+    return false;
+  }
   const { error } = await supabase
     .from('products')
     .delete()

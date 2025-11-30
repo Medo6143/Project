@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CarAnimation() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +21,7 @@ export default function CarAnimation() {
     <div className="fixed bottom-10 left-0 right-0 pointer-events-none z-50 hidden md:block">
       <div
         className="relative transition-all duration-300 ease-out"
-        style={{ left: `${scrollProgress}%` }}
+        style={isAr ? { right: `${scrollProgress}%` } : { left: `${scrollProgress}%` }}
       >
         <div className="relative w-24 h-24">
           <div className="absolute inset-0 bg-blue-500 blur-xl opacity-30 animate-pulse"></div>
@@ -26,6 +29,7 @@ export default function CarAnimation() {
           <svg
             viewBox="0 0 200 100"
             className="w-full h-full drop-shadow-2xl"
+            style={isAr ? { transform: 'scaleX(-1)' } : undefined}
           >
             <defs>
               <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="0%">

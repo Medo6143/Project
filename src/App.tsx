@@ -11,6 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import CartPage from './pages/CartPage';
 import AdminDashboard from './pages/AdminDashboard';
 import { useRouter } from './context/RouterContext';
+import LanguageToggle from './components/LanguageToggle';
 
 function App() {
   const { currentPage } = useRouter();
@@ -36,6 +37,7 @@ function App() {
       {currentPage === 'admin' && <AdminDashboard />}
 
       <Footer />
+      <LanguageToggle />
     </div>
   );
 }

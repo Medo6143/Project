@@ -1,41 +1,124 @@
-import { Flag } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
+import { X, User, Phone, Car, Calendar, Package, Hash, Send } from 'lucide-react';
 
 const products = [
   {
     title: 'قطع أمريكي',
     title_en: 'American Parts',
     description: 'قطع غيار أصلية وتجارية للسيارات الأمريكية',
-    gradient: 'from-blue-600 to-blue-800',
+    gradient: 'from-blue-500 to-cyan-600',
     flag: '🇺🇸',
+    image: 'https://i.pinimg.com/originals/ae/8b/85/ae8b85fafff33026515fe34167409a74.jpg',
+    features: ['أصلية 100%', 'ضمان 3 سنوات', 'شحن سريع']
   },
   {
     title: 'قطع ياباني',
     title_en: 'Japanese Parts',
     description: 'قطع غيار أصلية وتجارية للسيارات اليابانية',
-    gradient: 'from-red-600 to-red-800',
+    gradient: 'from-red-500 to-orange-600',
     flag: '🇯🇵',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.DyQ40zpWO6D_p6faZ4jGUQHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
+    features: ['دقة يابانية', 'ضمان 4 سنوات', 'متوفر فوراً']
   },
   {
     title: 'قطع كوري',
     title_en: 'Korean Parts',
     description: 'قطع غيار أصلية وتجارية للسيارات الكورية',
-    gradient: 'from-slate-600 to-slate-800',
+    gradient: 'from-purple-500 to-pink-600',
     flag: '🇰🇷',
+    image: 'data:image/webp;base64,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',
+    features: ['تكنولوجيا متطورة', 'ضمان 3 سنوات', 'أسعار تنافسية']
   },
   {
     title: 'قطع مستعملة',
     title_en: 'Used Parts',
     description: 'قطع غيار مستعملة بحالة ممتازة',
-    gradient: 'from-green-600 to-green-800',
+    gradient: 'from-green-500 to-emerald-600',
     flag: '♻️',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.0OSnN2Vwu38YjRIiCNA08AHaEd?rs=1&pid=ImgDetMain&o=7&rm=3',
+    features: ['فحص دقيق', 'ضمان سنة', 'توفير 60%']
   },
 ];
 
 export default function Products() {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [orderData, setOrderData] = useState({
+    name: '',
+    phone: '',
+    carType: '',
+    carYear: '',
+    partName: '',
+    partNumber: ''
+  });
+  const { language } = useLanguage();
+  const isAr = language === 'ar';
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setSelectedProduct(null);
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  const handleOrderSubmit = () => {
+    if (!selectedProduct) return;
+
+    const phone = "971556375521";
+    const message = `
+طلب جديد من MAJD PARTS 🚗
+─────────────────
+📦 المنتج: ${isAr ? selectedProduct.title : selectedProduct.title_en}
+👤 اسم العميل: ${orderData.name}
+📞 رقم الهاتف: ${orderData.phone}
+🚗 نوع السيارة: ${orderData.carType}
+📅 سنة الصنع: ${orderData.carYear}
+🔧 اسم القطعة: ${orderData.partName}
+🔢 رقم القطعة: ${orderData.partNumber}
+─────────────────
+تم الإرسال عبر الموقع الإلكتروني
+    `.trim();
+
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    setSelectedProduct(null);
+    setOrderData({ name: '', phone: '', carType: '', carYear: '', partName: '', partNumber: '' });
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <section id="products" className="py-20 bg-gradient-to-b from-slate-900 to-slate-800 relative overflow-hidden">
+    <section id="products" className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      {/* Background */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute bottom-10 left-20 w-48 h-48 animate-spin-reverse">
+        <div className="absolute top-20 left-20 w-48 h-48 animate-spin-slow">
+          <svg viewBox="0 0 100 100" className="text-blue-400">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="3" />
+          </svg>
+        </div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 animate-spin-reverse">
           <svg viewBox="0 0 100 100" className="text-slate-400">
             <path d="M50,5 L60,35 L90,40 L65,60 L75,95 L50,75 L25,95 L35,60 L10,40 L40,35 Z"
                   fill="none" stroke="currentColor" strokeWidth="2" />
@@ -44,37 +127,257 @@ export default function Products() {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
+        {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            منتجاتنا
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              {isAr ? 'منتجاتنا' : 'Our Products'}
+            </span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-400 mx-auto mb-4"></div>
-          <p className="text-slate-300 text-lg">نوفر جميع أنواع قطع الغيار لمختلف السيارات</p>
+          <div className="w-32 h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 mx-auto mb-8 rounded-full"></div>
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            {isAr ? 'نوفر جميع أنواع قطع الغيار لمختلف السيارات بجودة عالمية' : 'We provide all kinds of spare parts for various cars with global quality'}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Products Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {products.map((product, index) => (
-            <div
+            <motion.div
               key={index}
-              className="group relative bg-gradient-to-br from-slate-700/50 to-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-600 hover:border-blue-500 transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden"
+              variants={itemVariants}
+              className="group relative bg-gradient-to-br from-slate-800/40 to-slate-900/60 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-slate-600 transition-all duration-500 hover:scale-[1.02] overflow-hidden cursor-pointer"
+              onClick={() => setSelectedProduct(product)}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-0 group-hover:opacity-20 transition-all duration-300`}></div>
-
-              <div className="relative z-10 p-8">
-                <div className="text-6xl mb-6 text-center">{product.flag}</div>
-
-                <h3 className="text-2xl font-bold text-white mb-2 text-center">{product.title}</h3>
-                <p className="text-blue-300 text-sm mb-4 text-center">{product.title_en}</p>
-                <p className="text-slate-300 text-center">{product.description}</p>
+              {/* Animated Background */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${product.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+              
+              {/* Image Container */}
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={isAr ? product.title : product.title_en}
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                />
+                
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                
+                {/* Flag Badge */}
+                <div className="absolute top-4 left-4 text-4xl transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                  {product.flag}
+                </div>
               </div>
 
-              <div className="absolute top-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Flag className="w-full h-full text-blue-400" />
+              {/* Content */}
+              <div className="relative p-6">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-cyan-400 transition-all duration-500">
+                  {isAr ? product.title : product.title_en}
+                </h3>
+                <p className="text-blue-300/80 text-sm font-medium mb-3">
+                  {isAr ? product.title_en : product.title}
+                </p>
+                <p className="text-slate-300 text-sm leading-relaxed mb-4">
+                  {isAr ? product.description : (
+                    product.title_en === 'American Parts' ? 'Original and aftermarket parts for American cars' :
+                    product.title_en === 'Japanese Parts' ? 'Original and aftermarket parts for Japanese cars' :
+                    product.title_en === 'Korean Parts' ? 'Original and aftermarket parts for Korean cars' :
+                    'High-quality used parts in excellent condition'
+                  )}
+                </p>
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2">
+                  {product.features.map((feature, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-1 bg-slate-700/50 rounded-lg text-slate-300 text-xs border border-slate-600/50 group-hover:border-slate-500/50 transition-all duration-300"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+
+              {/* Hover Shine Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
+
+      {/* Order Modal */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <motion.div
+            id="modal-overlay"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProduct(null)}
+          >
+            <motion.div
+              className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl border border-slate-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="relative p-6 border-b border-slate-700">
+                <button
+                  onClick={() => setSelectedProduct(null)}
+                  className="absolute top-4 left-4 p-2 hover:bg-slate-700 rounded-xl transition-colors duration-200"
+                >
+                  <X className="w-6 h-6 text-slate-400" />
+                </button>
+                
+                <div className="text-center">
+                  <div className="text-5xl mb-3">{selectedProduct.flag}</div>
+                  <h3 className="text-2xl font-bold text-white mb-1">
+                    {isAr ? selectedProduct.title : selectedProduct.title_en}
+                  </h3>
+                  <p className="text-blue-300 text-lg">
+                    {isAr ? selectedProduct.title_en : selectedProduct.title}
+                  </p>
+                  <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto mt-3 rounded-full"></div>
+                </div>
+              </div>
+
+              {/* Order Form */}
+              <div className="p-6">
+                <div className="space-y-4">
+                  {/* Name */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      👤 {isAr ? 'اسم الشخص' : 'Full Name'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={orderData.name}
+                        onChange={(e) => setOrderData({ ...orderData, name: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "أدخل اسمك الكامل" : "Enter your full name"}
+                        dir={isAr ? "rtl" : "ltr"}
+                      />
+                      <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      📞 {isAr ? 'رقم الهاتف' : 'Phone Number'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        value={orderData.phone}
+                        onChange={(e) => setOrderData({ ...orderData, phone: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "أدخل رقم هاتفك" : "Enter your phone number"}
+                        dir={isAr ? "rtl" : "ltr"}
+                      />
+                      <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+
+                  {/* Car Type */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      🚗 {isAr ? 'نوع السيارة' : 'Car Type'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={orderData.carType}
+                        onChange={(e) => setOrderData({ ...orderData, carType: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "مثال: تويوتا كامري" : "Example: Toyota Camry"}
+                        dir={isAr ? "rtl" : "ltr"}
+                      />
+                      <Car className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+
+                  {/* Car Year */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      📅 {isAr ? 'سنة الصنع' : 'Manufacturing Year'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        value={orderData.carYear}
+                        onChange={(e) => setOrderData({ ...orderData, carYear: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "مثال: 2020" : "Example: 2020"}
+                        dir={isAr ? "rtl" : "ltr"}
+                        min="1900"
+                        max="2024"
+                      />
+                      <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+
+                  {/* Part Name */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      🔧 {isAr ? 'اسم القطعة' : 'Part Name'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={orderData.partName}
+                        onChange={(e) => setOrderData({ ...orderData, partName: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "مثال: محرك، كبوت" : "Example: Engine, Hood"}
+                        dir={isAr ? "rtl" : "ltr"}
+                      />
+                      <Package className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+
+                  {/* Part Number */}
+                  <div className="group">
+                    <label className="block text-white font-semibold mb-2 text-right">
+                      🔢 {isAr ? 'رقم القطعة' : 'Part Number'}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={orderData.partNumber}
+                        onChange={(e) => setOrderData({ ...orderData, partNumber: e.target.value })}
+                        className="w-full px-4 py-3 pr-12 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                        placeholder={isAr ? "رقم القطعة (إن وجد)" : "Part number (if available)"}
+                        dir={isAr ? "rtl" : "ltr"}
+                      />
+                      <Hash className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  onClick={handleOrderSubmit}
+                  className="w-full mt-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-green-500/30 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 group"
+                >
+                  <Send className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+                  <span>{isAr ? 'إرسال الطلب عبر واتساب' : 'Send Order via WhatsApp'}</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
