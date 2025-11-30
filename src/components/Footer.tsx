@@ -78,7 +78,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-slate-300 text-sm">{t.footer.address}</p>
-                  <p className="text-white font-semibold">{language === 'ar' ? 'دبي، الإمارات العربية المتحدة' : 'Dubai, United Arab Emirates'}</p>
+                  <p className="text-white font-semibold">{language === 'ar' ? 'الشارقة, الإمارات العربية المتحدة' : 'Sharjah, United Arab Emirates'}</p>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-center md:text-right">
               <p className="text-slate-400 text-sm">
-                2024 <span className="text-blue-400 font-semibold">MAJD PARTS</span>. {t.footer.rights}
+                2025 <span className="text-blue-400 font-semibold">MAJD PARTS</span>. {t.footer.rights}
               </p>
             </div>
             

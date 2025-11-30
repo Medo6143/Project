@@ -138,4 +138,4 @@ To change the WhatsApp phone number:
 - `src/components/Hero.tsx` Hero + Order Now opens Products modal
 
 ---
-If you need a step-by-step Firebase production security setup, CI/CD, or environment variables migration, tell me and I’ll extend this README.
+

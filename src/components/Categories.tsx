@@ -15,9 +15,9 @@ const categories = [
   },
   {
     icon: Car,
-    title: 'الهياكل',
+    title: 'اجزاء هيكل السيارات ',
     title_en: 'Body Parts',
-    description: 'هياكل وأبواب وصدامات بجودة تصنيع فائقة',
+    description: '     بمبر و بونيت و رفرف و باب وزجاج',
     image: 'https://1.bp.blogspot.com/-92tbMCPpk4I/VYQRbiX8esI/AAAAAAAAEaw/azELjIG-EY8/s1600/Mercedes-Benz-F800-Front-Crystal-City-Car-2014-Photoshop-Art-Orange-Neon-4K-Wallpapers-design-by-Tony-Kokhan-www.el-tony.com_.jpg',
     gradient: 'from-blue-500 to-cyan-600',
     count: '85+ منتج',
@@ -28,17 +28,17 @@ const categories = [
     title: 'الكهرباء',
     title_en: 'Electrical',
     description: 'قطع كهربائية وإلكترونية متطورة لسيارتك',
-    image: 'https://d2hucwwplm5rxi.cloudfront.net/wp-content/uploads/2022/08/04052454/Glossary-Electric-Car-Terminologies-body-4-ar-482022.jpg',
+    image: 'https://i.ytimg.com/vi/BR-AEun9i8E/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBN5K_Chlvc5cqSnfrQ42WxyDSFwg',
     gradient: 'from-yellow-500 to-amber-600',
     count: '200+ منتج',
     features: ['أنظمة كهربائية', 'إلكترونيات', 'أسلاك وموصلات']
   },
   {
     icon: Disc,
-    title: 'الفرامل',
+    title: 'كمبريصور وروديتور',
     title_en: 'Brakes',
-    description: 'منظومة فرامل كاملة لسلامتك على الطريق',
-    image: 'https://th.bing.com/th/id/OIP.d39lDG8CwMZn4R0D4kWp1QHaEL?w=272&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
+    description: 'كمبريصور وروديتور',
+    image: 'https://tse2.mm.bing.net/th/id/OIP.gMu75e0ENbiRReZbkSWAZwHaEC?rs=1&pid=ImgDetMain&o=7&rm=3',
     gradient: 'from-purple-500 to-pink-600',
     count: '95+ منتج',
     features: ['أنظمة فرامل', 'قطع أساسية', 'إكسسوارات']

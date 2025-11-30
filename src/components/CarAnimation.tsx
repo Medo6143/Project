@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 export default function CarAnimation() {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isHidden, setIsHidden] = useState(false);
   const { language } = useLanguage();
   const isAr = language === 'ar';
 
@@ -13,14 +14,19 @@ export default function CarAnimation() {
       setScrollProgress(progress);
     };
 
+    const onModalOpen = () => setIsHidden(true);
+    const onModalClose = () => setIsHidden(false);
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('ui:modal-open', onModalOpen as EventListener);
+    window.addEventListener('ui:modal-close', onModalClose as EventListener);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <>
       {/* Mobile (vertical movement) */}
-      <div className="fixed inset-x-0 top-0 bottom-0 pointer-events-none z-50 md:hidden">
+      <div className={`fixed inset-x-0 top-0 bottom-0 pointer-events-none z-50 md:hidden ${isHidden ? 'hidden' : ''}`}>
         <div
           className="absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out"
           style={{ top: `${scrollProgress}%` }}
@@ -62,7 +68,7 @@ export default function CarAnimation() {
       </div>
 
       {/* Desktop and up (horizontal movement) */}
-      <div className="fixed bottom-10 left-0 right-0 pointer-events-none z-50 hidden md:block">
+      <div className={`fixed bottom-10 left-0 right-0 pointer-events-none z-50 hidden md:block ${isHidden ? 'hidden' : ''}`}>
         <div
           className="relative transition-all duration-300 ease-out"
           style={isAr ? { right: `${scrollProgress}%` } : { left: `${scrollProgress}%` }}
