@@ -1,5 +1,7 @@
 import { Settings, Car, Zap, Disc, Wrench, Package, ArrowLeft, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import Reveal from './Reveal';
+
 import { useLanguage } from '../context/LanguageContext';
 
 const categories = [
@@ -113,6 +115,7 @@ export default function Categories() {
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Header Section */}
+        <Reveal>
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 rounded-full border border-blue-500/20 mb-6">
             <Sparkles className="w-4 h-4 text-blue-400" />
@@ -134,12 +137,14 @@ export default function Categories() {
               : 'Explore our comprehensive selection of high-quality auto parts. Each category is designed to meet your maintenance needs with precision and professionalism.'}
           </p>
         </div>
+        </Reveal>
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {categories.map((category, index) => {
             const Icon = category.icon;
             return (
+              <Reveal key={`cat-${index}`} delay={index * 0.1}>
               <div
                 key={index}
                 className="group relative bg-gradient-to-br from-slate-800/40 to-slate-900/60 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-slate-600 transition-all duration-700 hover:scale-[1.02] overflow-hidden"
@@ -223,11 +228,13 @@ export default function Categories() {
                 {/* Shine Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               </div>
+              </Reveal>
             );
           })}
         </div>
 
         {/* Bottom CTA */}
+        <Reveal delay={0.2}>
         <div className="text-center mt-16">
           <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl border border-blue-500/20">
             <Package className="w-6 h-6 text-blue-400" />
@@ -244,6 +251,7 @@ export default function Categories() {
             </span>
           </div>
         </div>
+        </Reveal>
       </div>
 
       {/* Custom Animations */}
